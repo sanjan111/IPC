@@ -7,6 +7,7 @@ int main(void)
 {
 	int i,pattern=0;
     PLL_Init();
+    Timer_Init();
     SPI_Init();
 
 		while(1)
