@@ -17,9 +17,8 @@ void PWM_Init(void)
 
     /* Set period (MR0) and duty (MR1) */
     LPC_PWM1->MR0 = 1500;
-    //LPC_PWM1->MR1 = 10;
-		LPC_PWM1->MR1 = 1400;
-		//LPC_PWM1->MR1 = 1400;
+	LPC_PWM1->MR1 = 1400;
+	
 
     /* Latch both MR0 and MR1 updates */
     LPC_PWM1->LER = (1 << 0) | (1 << 1);
@@ -54,8 +53,5 @@ void PWM1_IRQHandler(void)
 		LPC_GPIO2->FIOSET = (1 << 11);
 		/* Clear only MR1 flag */
 		LPC_PWM1->IR |= (1 << 1);
-	}
-	
-	
-	
+	}	
 }

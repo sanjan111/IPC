@@ -1,40 +1,24 @@
+#include "LPC17xx.h"
 #include "timer.h"
-#include "led.h"
 #include "pll.h"
+#include "pwm.h"
 
-extern volatile uint8_t LED1_flag;
-extern volatile uint8_t LED2_flag;
-
-int main()
+int main(void)
 {
     PLL_Init();
-    Timer_Init();
-    LED_Init();
-    delay_ms(1000); /* Testing the delay_ms function */
+    LPC_GPIO2->FIODIR |= (1 << 11);
+    PWM_Init();
 
-    while(1)
-    {
-        if (LED1_flag)
-        {
-        LED1_On();	
-		//delay_ms(500);
-        }
-        else
-        {
-        LED1_Off();
-        //delay_ms(500);
-        }
+	while(1)
+	{
+        /* Keep buzzer active for only reqired seconds, then stop */
+        delay_ms(200);
+        //NVIC_DisableIRQ(PWM1_IRQn);
+        LPC_PWM1->TCR = 0;                 /* stop PWM counter + PWM mode */
+        LPC_GPIO2->FIOSET = (1 << 11);     /* ensure buzzer OFF (active-LOW) */
+        /* Keep buzzer inactive for reqired seconds, then stop */
+        delay_ms(800);
+        LPC_PWM1->TCR = 1;
+	}
 
-        if (LED2_flag)
-        {
-        LED2_On();	
-		//delay_ms(500);
-        }
-        else
-        {
-        LED2_Off();
-        //delay_ms(500);
-        }
-
-    }
 }
