@@ -24,6 +24,7 @@ typedef enum
 #define MR0_VALUE                           (100U)           /* Match register 0 value */
 
 /* Match Control Register bits */
+#define MCR_MR0I                            (1U << 0U)       /* Interrupt on MR0 match */
 #define MCR_MR0R                            (1U << 1U)       /* Reset on MR0 match */
 
 /* Timer0 Interrupt Register bits */
@@ -37,5 +38,7 @@ typedef enum
 timer_status_t Timer_Init(void);
 /* Blocking delay using IR.MR0 polling */
 timer_status_t delay_ms(uint32_t ms);
+
+void TIMER0_IRQHandler(void);
 
 #endif /* TIMER_H */
