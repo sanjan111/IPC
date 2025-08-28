@@ -7,6 +7,7 @@ int main(void)
 {
     PLL_Init();
     LPC_GPIO2->FIODIR |= (1 << 11);
+		Timer_Init();
     PWM_Init();
 
 	while(1)
