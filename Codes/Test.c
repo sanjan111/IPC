@@ -1,25 +1,30 @@
-#include "LPC17xx.h"
+#include <stdint.h>
+#include "indicator.h"
+#include "PLL.h"
 #include "timer.h"
-#include "pll.h"
-#include "pwm.h"
 
 int main(void)
 {
+	int i,pattern=0;
     PLL_Init();
-    LPC_GPIO2->FIODIR |= (1 << 11);
-		Timer_Init();
-    PWM_Init();
+    SPI_Init();
 
-	while(1)
-	{
-        /* Keep buzzer active for only reqired seconds, then stop */
-        delay_ms(200);
-        //NVIC_DisableIRQ(PWM1_IRQn);
-        LPC_PWM1->TCR = 0;                 /* stop PWM counter + PWM mode */
-        LPC_GPIO2->FIOSET = (1 << 11);     /* ensure buzzer OFF (active-LOW) */
-        /* Keep buzzer inactive for reqired seconds, then stop */
-        delay_ms(800);
-        LPC_PWM1->TCR = 1;
-	}
+		while(1)
+		{
+			for (i=1;i<=4;i++)
+			{
+				pattern = pattern << 2;
+				pattern |= 01;
+        		HC595_Load(pattern);
+				delay_ms(1000);
+			}
 
+ 			for (i=4;i>0;i--)
+			{
+ 				pattern = pattern >> 2;
+        		HC595_Load(pattern);
+ 				delay_ms(1000);	
+			}
+		}
+ 
 }
