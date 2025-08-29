@@ -13,7 +13,7 @@
 
 int main(void)
 {
-	int hazard_switch = 1;
+	int hazard_switch = 0;
 	int left_switch = 0;
 	int right_switch = 1;
 
@@ -28,5 +28,6 @@ int main(void)
 			Indicator(LEFT_INDICATOR);
 		if (hazard_switch == OFF && right_switch == ON)
 			Indicator(RIGHT_INDICATOR);
+		
 	}
 }
