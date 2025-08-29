@@ -72,19 +72,6 @@ void Indicator(uint8_t direction)
 
     if (direction == 3)
     {
-        /* Detect any edge (0->1 or 1->0) of the 1 Hz flag.
-        The ISR toggles LED1_flag every second, so any change = 1 s elapsed. */
-        curr_flag = LED1_flag;
-        if (curr_flag != prev_flag)
-        {
-            prev_flag = curr_flag; /* consume the edge */
-
-            /* Advance exactly one step per second */
-            if (idx >= 0)
-            {
-                pattern |= (uint8_t)(1U << idx);
-                HC595_Load(pattern);
-                idx--;
-            }
+        
     }
 }
