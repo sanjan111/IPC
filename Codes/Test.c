@@ -13,9 +13,9 @@
 
 int main(void)
 {
-	int hazard_switch = 0;
+	int hazard_switch = 1;
 	int left_switch = 0;
-	int right_switch = 0;
+	int right_switch = 1;
 
     PLL_Init();
     Timer_Init();
