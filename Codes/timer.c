@@ -80,12 +80,12 @@ void TIMER0_IRQHandler(void)
         counter1++;
         counter2++;
     }
-    if (counter1 == 1000)
+    if (counter1 == 400)
     {
         LED1_flag ^= 1;
         counter1 = 0;
     }
-    if (counter2 == 1350)
+    if (counter2 == 450)
     {
         LED2_flag ^= 1;
         counter2 = 0;
