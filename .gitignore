@@ -1,0 +1,62 @@
+# Compiled object files
+*.o
+*.obj
+*.lo
+
+# Static and import libraries
+*.a
+*.la
+*.lib
+
+# Shared libraries / dynamic libs
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Executables and run outputs
+*.exe
+*.out
+*.app
+a.out
+
+# Debugging and linker artifacts (MSVC, etc.)
+*.pdb
+*.ilk
+*.idb
+*.map
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Dependency and metadata files
+*.d
+
+# Code coverage files (gcov/llvm-cov)
+*.gcno
+*.gcda
+*.gcov
+
+# Core dumps
+core
+core.*
+
+# Common build directories
+/build/
+/bin/
+/obj/
+/out/
+/dist/
+/Debug/
+/Release/
+/x64/
+/x86/
+
+# Autotools / CMake generated dirs and files
+/.deps/
+/.libs/
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/CTestTestfile.cmake
