@@ -80,14 +80,18 @@ void TIMER0_IRQHandler(void)
         counter1++;
         counter2++;
     }
-    if (counter1 == 400)
+
+    /* Match documented 350ms toggle for LED1 (350ms) */
+    if (counter1 >= 350U)
     {
-        LED1_flag ^= 1;
-        counter1 = 0;
+        LED1_flag ^= 1U;
+        counter1 = 0U;
     }
-    if (counter2 == 100)
+
+    /* Match documented 400ms toggle for LED2 (400ms) */
+    if (counter2 >= 400U)
     {
-        LED2_flag ^= 1;
-        counter2 = 0;
+        LED2_flag ^= 1U;
+        counter2 = 0U;
     }
 }
