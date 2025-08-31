@@ -8,7 +8,7 @@ void LED_Init(void)
 
 void LED_Status(uint8_t status)
 {
-    if (status == 1)
+    if (status == 4)
         LPC_GPIO1->FIOSET = (0x1 << 29);
     else if (status == 0)
         LPC_GPIO1->FIOCLR = (0x1 << 29);

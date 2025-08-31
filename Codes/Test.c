@@ -14,14 +14,14 @@
 #define LEFT_INDICATOR			1
 #define RIGHT_INDICATOR			2
 #define HAZARD_INDICATOR		3
-#define SEATBELT_INDICATOR		1
+#define SEATBELT_INDICATOR		4
 
 int main(void)
 {
 	int hazard_switch = 1;
-	int left_switch = 0;
+	int left_switch = 1;
 	int right_switch = 1;
-	int seatbelt_switch = 0;
+	int seatbelt_switch = 1;
 
   	PLL_Init();
   	Timer_Init();
@@ -48,6 +48,9 @@ int main(void)
 			Buzzer(RIGHT_INDICATOR);
 		}
 		if (seatbelt_switch == ON)
+		{
 			LED_Status(SEATBELT_INDICATOR);
+			Buzzer(SEATBELT_INDICATOR);
+		}
 	}
 }
