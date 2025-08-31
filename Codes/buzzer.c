@@ -15,6 +15,13 @@ void Buzzer(uint8_t direction)
     static beep_state_t state = BEEP_OFF;
     static uint8_t started = 0U;    /* ensures init runs only once while active */
 
+    /* Separate state for direction == 3 (20 ms ON, 2000 ms OFF) */
+    static uint8_t  prev_tick3 = 0U;
+    static uint8_t  on_ticks3  = 0U;
+    static uint8_t  off_ticks3 = 0U;
+    static beep_state_t state3  = BEEP_OFF;
+    static uint8_t started3     = 0U;
+
     uint8_t curr;
 
     if (direction == 1U || direction == 2U)
@@ -66,6 +73,57 @@ void Buzzer(uint8_t direction)
             }
         }
     }
+    else if (direction == 3U)
+    {
+        /* Ensure duty (MR1) = 200 and latch */
+        LPC_PWM1->MR1 = 200U;
+        LPC_PWM1->LER = (PWM_LER_EN_MR0_MASK | PWM_LER_EN_MR1_MASK);
+
+        /* Initialize only once when this mode becomes active */
+        if (started3 == 0U)
+        {
+            prev_tick3 = Buzzer_flag;
+            LPC_PWM1->TCR = (PWM_TCR_COUNTER_ENABLE_MASK | PWM_TCR_PWM_ENABLE_MASK);
+            state3 = BEEP_ON;
+            on_ticks3 = 0U;
+            off_ticks3 = 0U;
+            started3 = 1U;
+        }
+
+        /* 20 ms edge tick */
+        {
+            uint8_t curr3 = Buzzer_flag;
+            if ((uint8_t)(curr3 ^ prev_tick3) != 0U)
+            {
+                prev_tick3 = curr3;
+                if (state3 == BEEP_ON)
+                {
+                    on_ticks3++;
+                    if (on_ticks3 >= 1U) /* 1 * 20 ms = 20 ms */
+                    {
+                        LPC_PWM1->TCR = 0;                 /* stop PWM */
+                        LPC_GPIO2->FIOSET = (1U << 11);    /* active-LOW off */
+                        on_ticks3 = 0U;
+                        state3 = BEEP_OFF;
+                    }
+                }
+                else /* BEEP_OFF */
+                {
+                    off_ticks3++;
+                    if (off_ticks3 >= 100U) /* 100 * 20 ms = 2000 ms */
+                    {
+                        LPC_PWM1->TCR = (PWM_TCR_COUNTER_ENABLE_MASK | PWM_TCR_PWM_ENABLE_MASK);
+                        off_ticks3 = 0U;
+                        state3 = BEEP_ON;
+                    }
+                }
+            }
+        }
+    }
+    else if (direction == 3U)
+    {
+        
+    }
     else
     {
         /* Not a beeping direction: ensure buzzer is OFF and reset counters */
@@ -75,6 +133,10 @@ void Buzzer(uint8_t direction)
         off_ticks = 0U;
         state = BEEP_OFF;
         started = 0U;
+        on_ticks3 = 0U;
+        off_ticks3 = 0U;
+        state3 = BEEP_OFF;
+        started3 = 0U;
         /* prev_tick left unchanged until next enable */
     }
 }

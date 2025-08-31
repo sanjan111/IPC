@@ -18,7 +18,7 @@
 
 int main(void)
 {
-	int hazard_switch = 0;
+	int hazard_switch = 1;
 	int left_switch = 0;
 	int right_switch = 1;
 	int seatbelt_switch = 0;
@@ -33,7 +33,10 @@ int main(void)
 	while (1)
 	{
 		if (hazard_switch == ON)
+		{
 			Indicator(HAZARD_INDICATOR);
+			Buzzer(HAZARD_INDICATOR);
+		}
 		if (hazard_switch == OFF && left_switch == ON)
 		{
 			Indicator(LEFT_INDICATOR);
