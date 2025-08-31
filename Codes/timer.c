@@ -3,12 +3,11 @@
 
 volatile uint8_t LED1_flag = 0;
 volatile uint8_t LED2_flag = 0;
-volatile uint8_t BuzzerOn_flag = 0;
-volatile uint8_t BuzzerOff_flag = 0;
+volatile uint8_t Buzzer_flag = 0;
 volatile uint16_t counter1 = 0;
 volatile uint16_t counter2 = 0;
 volatile uint16_t counter3 = 0;
-volatile uint16_t counter4 = 0;
+
 
 timer_status_t Timer_Init(void)
 {
@@ -84,7 +83,6 @@ void TIMER0_IRQHandler(void)
         counter1++;
         counter2++;
         counter3++;
-        counter4++;
     }
 
     /* Match documented 350ms toggle for LED1 (350ms) */
@@ -101,16 +99,11 @@ void TIMER0_IRQHandler(void)
         counter2 = 0U;
     }
 
-    if (counter3 >= 200U)
+    if (counter3 >= 20U)
     {
-        BuzzerOn_flag ^= 1U;
+        Buzzer_flag ^= 1U;
         counter3 = 0U;
     }
 
-    if (counter4 >= 800U)
-    {
-        BuzzerOff_flag ^= 1U;
-        counter4 = 0U;
-    }
 
 }
