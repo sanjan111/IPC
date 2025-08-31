@@ -19,8 +19,8 @@
 int main(void)
 {
 	int hazard_switch = 0;
-	int left_switch = 1;
-	int right_switch = 0;
+	int left_switch = 0;
+	int right_switch = 1;
 	int seatbelt_switch = 0;
 
   	PLL_Init();

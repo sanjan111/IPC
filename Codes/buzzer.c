@@ -13,6 +13,7 @@ void Buzzer(uint8_t direction)
     static uint8_t  on_ticks  = 0U;  /* 20 ms units while ON */
     static uint8_t  off_ticks = 0U;  /* 20 ms units while OFF */
     static beep_state_t state = BEEP_OFF;
+    static uint8_t started = 0U;    /* ensures init runs only once while active */
 
     uint8_t curr;
 
@@ -22,13 +23,15 @@ void Buzzer(uint8_t direction)
         LPC_PWM1->MR1 = 750U;
         LPC_PWM1->LER = (PWM_LER_EN_MR0_MASK | PWM_LER_EN_MR1_MASK);
 
-        /* Initialize prev_tick on first invocation after inactivity */
-        if (on_ticks == 0U && off_ticks == 0U && state == BEEP_OFF)
+        /* Initialize only once when beeping becomes active */
+        if (started == 0U)
         {
             prev_tick = Buzzer_flag;
-            /* Start with ON phase for 40 ms */
-            LPC_PWM1->TCR = 1; /* start PWM */
+            LPC_PWM1->TCR = (PWM_TCR_COUNTER_ENABLE_MASK | PWM_TCR_PWM_ENABLE_MASK); /* start PWM */
             state = BEEP_ON;
+            on_ticks = 0U;
+            off_ticks = 0U;
+            started = 1U;
         }
 
         /* Edge detect 20 ms tick and advance state machine */
@@ -55,7 +58,7 @@ void Buzzer(uint8_t direction)
                     if (off_ticks >= 16U) /* 16 * 20 ms = 320 ms */
                     {
                         /* Transition to ON */
-                        LPC_PWM1->TCR = 1; /* start PWM */
+                        LPC_PWM1->TCR = (PWM_TCR_COUNTER_ENABLE_MASK | PWM_TCR_PWM_ENABLE_MASK); /* start PWM */
                         off_ticks = 0U;
                         state = BEEP_ON;
                     }
@@ -71,6 +74,7 @@ void Buzzer(uint8_t direction)
         on_ticks = 0U;
         off_ticks = 0U;
         state = BEEP_OFF;
+        started = 0U;
         /* prev_tick left unchanged until next enable */
     }
 }
